@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.Socket;
+import Comunicacion.Buffer;
 
 /**
  * Clase que modela al cliente principal
@@ -15,7 +15,7 @@ import java.net.Socket;
 public class ClientePrincipal {
 	public static final String RUTA = "./data/infoMain.txt";
 	//Main
-	public static void main(String args[]) throws IOException
+	public ClientePrincipal(Buffer pBuffer) throws IOException
 	{
 		boolean continuar = true;
 		int numeroActualThreads = 0;
@@ -34,9 +34,10 @@ public class ClientePrincipal {
 			numeroActualThreads++;
 			if(numeroActualThreads<numeroThreadsClientesMax)
 			{
-				ThreadCliente thread = new ThreadCliente(numeroActualThreads, numeroMensajesMaximo);
+				ThreadCliente thread = new ThreadCliente(numeroActualThreads, numeroMensajesMaximo, pBuffer);
 				thread.start();
 			}
 		}
+		lector.close();
 	}
 }

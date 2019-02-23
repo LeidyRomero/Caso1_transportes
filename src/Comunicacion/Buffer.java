@@ -2,7 +2,6 @@ package Comunicacion;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,13 +14,11 @@ public class Buffer {
 
 	public static final String RUTA = "./data/infoMain.txt";
 	private int capacidad = 0;
-
-	private ArrayList<Integer> buff;
-	private int n;
-	Object lleno;
+	private ArrayList<Mensaje> buff;
+	Object lleno;//TODO revisar
 	Object vacio;
 
-	public Buffer(int n) throws IOException {
+	public Buffer() throws IOException {
 
 
 		//Leyendo la capacidad del buffer:
@@ -30,49 +27,49 @@ public class Buffer {
 		lector.readLine();//numero de clientes
 		String[] datos = lector.readLine().split(":");
 		this.capacidad = Integer.parseInt(datos[1]);
+		lector.close();
 
-
-		buff = new ArrayList<Integer>();
+		buff = new ArrayList<Mensaje>();
 		lleno = new Object();
 		vacio = new Object();
 	}
 	//TODO revisar
-	//	public void almacenar(Integer i) {
-	//		synchronized (lleno) {
-	//			while (buff.size() == n) {
-	//				try {
-	//					System.out.println("Buffer lleno");
-	//					lleno.wait();
-	//				} catch (InterruptedException e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		}
-	//		synchronized (this) {
-	//			buff.add(i);
-	//		}
-	//		synchronized (vacio) {
-	//			vacio.notify();
-	//		}
-	//	}
-	//	public Integer retirar() {
-	//		synchronized (vacio) {
-	//			while (buff.size() == 0) {
-	//				try {
-	//					System.out.println("Buffer vacio");
-	//					vacio.wait();
-	//				} catch (InterruptedException e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		}
-	//		Integer i;
-	//		synchronized (this) {
-	//			i = buff.remove(0);
-	//		}
-	//		synchronized (lleno) {
-	//			lleno.notify();
-	//		}
-	//		return i;
-	//	}
+		public void almacenar(Mensaje i) {
+			synchronized (lleno) {
+//				while (buff.size() == n) {
+//					try {
+//						System.out.println("Buffer lleno");
+//						lleno.wait();
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+			}
+			synchronized (this) {
+				buff.add(i);
+			}
+			synchronized (vacio) {
+				vacio.notify();
+			}
+		}
+		public Mensaje retirar() {
+			synchronized (vacio) {
+//				while (buff.size() == 0) {
+//					try {
+//						System.out.println("Buffer vacio");
+//						vacio.wait();
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+			}
+			Mensaje i;
+			synchronized (this) {
+				i = buff.remove(0);
+			}
+			synchronized (lleno) {
+				lleno.notify();
+			}
+			return i;
+		}
 }

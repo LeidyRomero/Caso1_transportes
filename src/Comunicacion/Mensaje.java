@@ -5,9 +5,10 @@ package Comunicacion;
  * @author Maria Ocampo y Leidy Romero
  */
 public class Mensaje {
-
-	public Mensaje()
+	private String mensaje;
+	
+	public Mensaje(String consulta)
 	{
-		
+		this.mensaje = consulta;
 	}
 }
