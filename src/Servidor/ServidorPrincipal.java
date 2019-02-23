@@ -8,7 +8,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/**
+ * Clase que modela al servidor principal
+ * 
+ * @author Maria Ocampo y Leidy Romero
+ */
 public class ServidorPrincipal extends Thread{
 
 	public static final int PUERTO = 3400;
