@@ -7,5 +7,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ThreadServidor extends Thread{
-
+	private Socket sktCliente = null;
+	private int id;
+	
+	public ThreadServidor(Socket pSocket, int pId)
+	{
+		this.id = pId;
+		this.sktCliente = pSocket;
+	}
+	
 }
