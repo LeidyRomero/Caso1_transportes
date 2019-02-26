@@ -15,8 +15,6 @@ public class Buffer {
 	public static final String RUTA = "./data/infoMain.txt";
 	private int capacidad = 0;
 	private ArrayList<Mensaje> buff;
-	Object lleno;//TODO revisar
-	Object vacio;
 
 	public Buffer() throws IOException {
 
@@ -26,50 +24,49 @@ public class Buffer {
 		lector.readLine();//numero de servidores
 		lector.readLine();//numero de clientes
 		String[] datos = lector.readLine().split(":");
-		this.capacidad = Integer.parseInt(datos[1]);
+		this.capacidad = Integer.parseInt(datos[1].substring(0, datos[1].length()-1));
 		lector.close();
 
 		buff = new ArrayList<Mensaje>();
-		lleno = new Object();
-		vacio = new Object();
 	}
 	//TODO revisar
-		public void almacenar(Mensaje i) {
-			synchronized (lleno) {
-//				while (buff.size() == n) {
-//					try {
-//						System.out.println("Buffer lleno");
-//						lleno.wait();
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-			}
-			synchronized (this) {
-				buff.add(i);
-			}
-			synchronized (vacio) {
-				vacio.notify();
+	public void almacenar(Mensaje mensaje) {
+		synchronized (mensaje.darObjetoLleno()) {
+			while (buff.size() == capacidad) {
+				try {
+					System.out.println("Buffer lleno");
+					mensaje.darObjetoLleno().wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		public Mensaje retirar() {
-			synchronized (vacio) {
-//				while (buff.size() == 0) {
-//					try {
-//						System.out.println("Buffer vacio");
-//						vacio.wait();
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-			}
-			Mensaje i;
-			synchronized (this) {
-				i = buff.remove(0);
-			}
-			synchronized (lleno) {
-				lleno.notify();
-			}
-			return i;
+		synchronized (this) {
+			buff.add(mensaje);
 		}
+		synchronized (mensaje.darObjetoVacio()) {
+			mensaje.darObjetoVacio().notify();
+		}
+	}
+
+	public Mensaje retirar() {
+		//			synchronized (mensaje.darObjetoVacio()) {
+		while (buff.size() < capacidad) {
+			//			try {
+			//				System.out.println("Buffer vacio");
+			//				//				mensaje.darObjetoVacio().wait();
+			//			} catch (InterruptedException e) {
+			//				e.printStackTrace();
+			//			}
+		}
+		//}
+		Mensaje mensaje;
+		synchronized (this) {
+			mensaje = buff.remove(0);
+		}
+		synchronized (mensaje.darObjetoLleno()) {
+			mensaje.darObjetoLleno().notify();
+		}
+		return mensaje;
+	}
 }

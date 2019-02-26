@@ -33,13 +33,9 @@ public class ThreadCliente extends Thread{
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
 		//TODO: instanciar un mensaje y enviarlo al buffer
-		System.out.println("Escriba el mensaje a enviar: ");
-		
-		try { 
-			Mensaje mensajeCliente = new Mensaje(stdIn.readLine()); 
-			buffer.almacenar(mensajeCliente);
-		}
-		catch (IOException e) { e.printStackTrace();}
+
+		Mensaje mensajeCliente = new Mensaje("RANDOM"); 
+		buffer.almacenar(mensajeCliente);
 
 		numeroMaxMensajes--;
 		if(numeroMaxMensajes==0)

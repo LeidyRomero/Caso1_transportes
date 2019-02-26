@@ -17,26 +17,25 @@ public class ClientePrincipal {
 	//Main
 	public ClientePrincipal(Buffer pBuffer) throws IOException
 	{
-		boolean continuar = true;
 		int numeroActualThreads = 0;
-		
+
 		//Leyendo el numero de servidores desde el JSON:
 		BufferedReader lector = new BufferedReader(new FileReader(new File(RUTA)));
 		lector.readLine();
+		lector.readLine();
 		String[] datos = lector.readLine().split(":");
-		int numeroThreadsClientesMax = Integer.parseInt(datos[1]);
+		int numeroThreadsClientesMax = Integer.parseInt(datos[1].substring(0, datos[1].length()-1));
 		lector.readLine();
 		String[] datos2 = lector.readLine().split(":");
-		int numeroMensajesMaximo = Integer.parseInt(datos2[(int)Math.random()*29]);
-		
-		while(continuar)
+
+		String[] numeros = datos2[1].substring(1, datos[1].length()-1).split(",");
+		int numeroMensajesMaximo = Integer.parseInt(numeros[(int)Math.random()*29]);
+
+		while(numeroActualThreads<numeroThreadsClientesMax)
 		{
+			ThreadCliente thread = new ThreadCliente(numeroActualThreads, numeroMensajesMaximo, pBuffer);
+			thread.start();
 			numeroActualThreads++;
-			if(numeroActualThreads<numeroThreadsClientesMax)
-			{
-				ThreadCliente thread = new ThreadCliente(numeroActualThreads, numeroMensajesMaximo, pBuffer);
-				thread.start();
-			}
 		}
 		lector.close();
 	}
