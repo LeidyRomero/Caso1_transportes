@@ -28,11 +28,11 @@ public class ClientePrincipal {
 		lector.readLine();
 		String[] datos2 = lector.readLine().split(":");
 
-		String[] numeros = datos2[1].substring(1, datos[1].length()-1).split(",");
-		int numeroMensajesMaximo = Integer.parseInt(numeros[(int)Math.random()*29]);
+		String[] numeros = datos2[1].substring(1, datos2[1].length()-1).split(",");
 
 		while(numeroActualThreads<numeroThreadsClientesMax)
 		{
+			int numeroMensajesMaximo = Integer.parseInt(numeros[(int)Math.round(Math.random()*29)]);
 			ThreadCliente thread = new ThreadCliente(numeroActualThreads, numeroMensajesMaximo, pBuffer);
 			thread.start();
 			numeroActualThreads++;
