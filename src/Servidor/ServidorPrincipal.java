@@ -29,7 +29,7 @@ public class ServidorPrincipal extends Thread{
 
 		while(numeroActualThreads<numeroThreadsMax)
 		{
-			ThreadServidor thread = new ThreadServidor(numeroActualThreads);
+			ThreadServidor thread = new ThreadServidor(numeroActualThreads, pBuffer);
 			thread.start();
 			numeroActualThreads++;
 		}

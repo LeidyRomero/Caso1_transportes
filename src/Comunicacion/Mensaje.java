@@ -5,26 +5,15 @@ package Comunicacion;
  * @author Maria Ocampo y Leidy Romero
  */
 public class Mensaje {
-	private String mensaje;
-	Object lleno;
-	Object vacio;
+	private int mensaje;
 	
-	public Mensaje(String consulta)
+	public Mensaje(int consulta)
 	{
 		this.mensaje = consulta;
-		this.lleno = new Object();
-		this.vacio = new Object();
 	}
-	public String darMensaje()
+	public int darMensaje()
 	{
 		return mensaje;
 	}
-	public Object darObjetoLleno()
-	{
-		return lleno;
-	}
-	public Object darObjetoVacio()
-	{
-		return vacio;
-	}
+
 }

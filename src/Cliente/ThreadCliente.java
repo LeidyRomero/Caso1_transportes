@@ -29,19 +29,14 @@ public class ThreadCliente extends Thread{
 	public void run()
 	{
 		System.out.println("Inicio de un nuevo thread cliente: "+ id+ ", "+numeroMaxMensajes);
-
-		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-
-		//TODO: instanciar un mensaje y enviarlo al buffer
-
-		Mensaje mensajeCliente = new Mensaje("RANDOM"); 
+		
+		Mensaje mensajeCliente = new Mensaje((int)Math.round(Math.random()*29)); 
 		buffer.almacenar(mensajeCliente);
 
 		numeroMaxMensajes--;
 		if(numeroMaxMensajes==0)
 		{
-			//TODO: avisar al buffer que se retira
-
+			buffer.saleCliente();
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.lang.Thread;
 /**
  * Clase que modela al buffer
  * 
@@ -14,11 +15,10 @@ public class Buffer {
 
 	public static final String RUTA = "./data/infoMain.txt";
 	private int capacidad = 0;
+	private int numeroClientesSalieron = 0;
 	private ArrayList<Mensaje> buff;
 
 	public Buffer() throws IOException {
-
-
 		//Leyendo la capacidad del buffer:
 		BufferedReader lector = new BufferedReader(new FileReader(new File(RUTA)));
 		lector.readLine();//numero de servidores
@@ -29,13 +29,20 @@ public class Buffer {
 
 		buff = new ArrayList<Mensaje>();
 	}
-	//TODO revisar
+	public void saleCliente()
+	{
+		numeroClientesSalieron++;
+	}
+	public int darNumeroClientesSalieron()
+	{
+		return numeroClientesSalieron;
+	}
 	public void almacenar(Mensaje mensaje) {
-		synchronized (mensaje.darObjetoLleno()) {
+		synchronized (this) {
 			while (buff.size() == capacidad) {
 				try {
 					System.out.println("Buffer lleno");
-					mensaje.darObjetoLleno().wait();
+					this.wait();//se duerme en el buffer
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -43,30 +50,24 @@ public class Buffer {
 		}
 		synchronized (this) {
 			buff.add(mensaje);
-		}
-		synchronized (mensaje.darObjetoVacio()) {
-			mensaje.darObjetoVacio().notify();
+			//TODO el cliente se duerme sobre el objeto
+			//.wait();
 		}
 	}
 
-	public Mensaje retirar() {
-		//			synchronized (mensaje.darObjetoVacio()) {
-		while (buff.size() < capacidad) {
-			//			try {
-			//				System.out.println("Buffer vacio");
-			//				//				mensaje.darObjetoVacio().wait();
-			//			} catch (InterruptedException e) {
-			//				e.printStackTrace();
-			//			}
+	public Mensaje retirar(Thread x) {
+		synchronized (x) {
+			while (buff.size() < capacidad) {
+				System.out.println("Buffer vacio");
+				x.yield();//TODO revisar
+			}
+			Mensaje mensaje;
+			synchronized (this) {
+				mensaje = buff.remove(0);
+				//TODO despertar al cliente dormido en el mensaje
+				//.notify();
+			}
+			return mensaje;
 		}
-		//}
-		Mensaje mensaje;
-		synchronized (this) {
-			mensaje = buff.remove(0);
-		}
-		synchronized (mensaje.darObjetoLleno()) {
-			mensaje.darObjetoLleno().notify();
-		}
-		return mensaje;
 	}
 }
