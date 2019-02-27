@@ -26,14 +26,20 @@ public class ThreadCliente extends Thread{
 		this.numeroMaxMensajes = pNumeroMaxMensajes;
 		this.buffer = pBuffer;
 	}
+
 	public void run()
 	{
 		System.out.println("Inicio de un nuevo thread cliente: "+ id+ ", "+numeroMaxMensajes);
-		
-		Mensaje mensajeCliente = new Mensaje((int)Math.round(Math.random()*29)); 
-		buffer.almacenar(mensajeCliente);
 
-		numeroMaxMensajes--;
+		while(numeroMaxMensajes > 0)
+		{
+			Mensaje mensajeCliente = new Mensaje((int)Math.round(Math.random()*29),0); 
+			buffer.almacenar(mensajeCliente);
+			mensajeCliente.enviarMensaje();
+
+			numeroMaxMensajes--;
+		}
+		
 		if(numeroMaxMensajes==0)
 		{
 			buffer.saleCliente();

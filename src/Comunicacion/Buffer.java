@@ -49,23 +49,23 @@ public class Buffer {
 			}
 		}
 		synchronized (this) {
+			System.out.println("Agrega");
 			buff.add(mensaje);
-			//TODO el cliente se duerme sobre el objeto
-			//.wait();
 		}
 	}
 
 	public Mensaje retirar(Thread x) {
 		synchronized (x) {
-			while (buff.size() < capacidad) {
-				System.out.println("Buffer vacio");
-				x.yield();//TODO revisar
-			}
+//			while (buff.size() < capacidad) {
+//				System.out.println("Buffer vacio");
+//				x.yield();//TODO revisar
+//			}
 			Mensaje mensaje;
 			synchronized (this) {
 				mensaje = buff.remove(0);
-				//TODO despertar al cliente dormido en el mensaje
-				//.notify();
+				mensaje.aumentarMensaje();
+				mensaje.recibirRespuesta();
+				notify();
 			}
 			return mensaje;
 		}

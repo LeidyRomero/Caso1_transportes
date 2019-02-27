@@ -32,7 +32,7 @@ public class ClientePrincipal {
 
 		while(numeroActualThreads<numeroThreadsClientesMax)
 		{
-			int numeroMensajesMaximo = Integer.parseInt(numeros[(int)Math.round(Math.random()*29)]);
+			int numeroMensajesMaximo = Integer.parseInt(numeros[(int)Math.round(Math.random()*5)]);
 			ThreadCliente thread = new ThreadCliente(numeroActualThreads, numeroMensajesMaximo, pBuffer);
 			thread.start();
 			numeroActualThreads++;

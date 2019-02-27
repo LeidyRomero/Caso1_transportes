@@ -27,18 +27,16 @@ public class ThreadServidor extends Thread{
 		
 		while(hayClientes())
 		{
-			int m = buffer.retirar(this).darMensaje();
-			m++;
-			//TODO despertar al cliente
+			buffer.retirar(this);
 		}
 	}
-	public boolean hayClientes(){
+	public synchronized boolean hayClientes(){
 		int a = 0;
 		
 		try { a = darNumeroThreads();} 
 		catch (IOException e) { e.printStackTrace(); }
 		
-		return buffer.darNumeroClientesSalieron() != a;
+		return buffer.darNumeroClientesSalieron() != a && buffer.darNumeroClientesSalieron() != 0;
 	}
 	public int darNumeroThreads() throws IOException
 	{
