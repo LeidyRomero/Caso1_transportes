@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.print.attribute.standard.NumberOfDocuments;
+
 import Cliente.ClientePrincipal;
 
 import java.lang.Thread;
@@ -19,6 +21,7 @@ public class Buffer {
 	public static final String RUTA = "./data/infoMain.txt";
 	private int capacidad = 0;
 	private int numeroClientesSalieron;
+	private int numeroServidores;
 	private ArrayList<Mensaje> buff;
 	private Object lleno;
 	private Object vacio;
@@ -27,7 +30,8 @@ public class Buffer {
 		//Leyendo la capacidad del buffer:
 		BufferedReader lector = new BufferedReader(new FileReader(new File(RUTA)));
 		lector.readLine();//{
-		lector.readLine();//numero de servidores
+		String[] servidores = lector.readLine().split(":");//numero de servidores
+		this.numeroServidores = Integer.parseInt(servidores[1].substring(0, servidores[1].length()-1));
 		String[] clientes = lector.readLine().split(":");//numero de clientes
 		this.numeroClientesSalieron = Integer.parseInt(clientes[1].substring(0, clientes[1].length()-1));
 		
@@ -81,8 +85,8 @@ public class Buffer {
 
 		synchronized (vacio) {
 			try {
-				while(buff.size() == 0)
-					vacio.wait();
+				while(buff.size() == 0 && darNumeroClientesSalieron() > 0)
+					vacio.wait();				
 			} 
 			catch (InterruptedException e) {
 				// Manejo de excepción
@@ -103,5 +107,17 @@ public class Buffer {
 			lleno.notify();
 		}
 		return mensaje;
+	}
+	
+	public void terminar()
+	{
+		synchronized (vacio) {
+				while(buff.size() == 0 && darNumeroClientesSalieron() == 0 && numeroServidores > 0)
+				{
+					vacio.notifyAll();
+					numeroServidores--;
+					System.out.println("numServidores: " + numeroServidores);
+				}
+		}
 	}
 }

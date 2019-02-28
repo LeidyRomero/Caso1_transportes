@@ -31,7 +31,7 @@ public class ThreadServidor extends Thread{
 			System.out.println(buffer.darNumeroClientesSalieron());	
 			synchronized (this) {
 				boolean a = true;//TODO revisar
-				while (buffer.retirar() == null) {
+				if (buffer.retirar() == null) {
 					if(a){
 						System.out.println("Buffer vacio");
 						a= false;

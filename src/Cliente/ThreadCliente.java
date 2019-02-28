@@ -45,6 +45,7 @@ public class ThreadCliente extends Thread{
 		{
 			System.out.println("Sale cliente");
 			buffer.saleCliente();
+			buffer.terminar();
 		}
 	}
 }
