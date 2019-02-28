@@ -25,22 +25,26 @@ public class ThreadServidor extends Thread{
 	public void run()
 	{
 		System.out.println("Inicio de un nuevo thread servidor: "+ id);
-
+		
 		while(buffer.darNumeroClientesSalieron() > 0)
 		{
+			System.out.println(buffer.darNumeroClientesSalieron());	
 			synchronized (this) {
 				boolean a = true;//TODO revisar
-				while (buffer.darTamañoActualBuffer() == 0) {
+				while (buffer.retirar() == null) {
 					if(a){
 						System.out.println("Buffer vacio");
 						a= false;
+						yield();
 					}
-					yield();
 				}
 			}
+			
 			Mensaje mensaje = buffer.retirar();
+			System.out.println(buffer.darNumeroClientesSalieron());	
 		}
 		//TODO parar servidor: cuando salga del while debería terminar
+	System.out.println("termina servidor");
 	}
 }
 

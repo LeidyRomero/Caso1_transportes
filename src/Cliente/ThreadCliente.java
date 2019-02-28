@@ -43,6 +43,7 @@ public class ThreadCliente extends Thread{
 		
 		if(numeroMaxMensajes==0)
 		{
+			System.out.println("Sale cliente");
 			buffer.saleCliente();
 		}
 	}

@@ -26,18 +26,20 @@ public class Buffer {
 	public Buffer() throws IOException {
 		//Leyendo la capacidad del buffer:
 		BufferedReader lector = new BufferedReader(new FileReader(new File(RUTA)));
+		lector.readLine();//{
 		lector.readLine();//numero de servidores
-		lector.readLine();//numero de clientes
+		String[] clientes = lector.readLine().split(":");//numero de clientes
+		this.numeroClientesSalieron = Integer.parseInt(clientes[1].substring(0, clientes[1].length()-1));
+		
 		String[] datos = lector.readLine().split(":");
 		this.capacidad = Integer.parseInt(datos[1].substring(0, datos[1].length()-1));
-		this.numeroClientesSalieron = this.capacidad;
 		lector.close();
 
 		buff = new ArrayList<Mensaje>();
 		lleno = new Object();
 		vacio = new Object();
 	}
-	public void saleCliente()
+	public synchronized void saleCliente()
 	{
 		numeroClientesSalieron--;
 	}
@@ -86,13 +88,16 @@ public class Buffer {
 				// Manejo de excepción
 			}
 		}
+		Mensaje mensaje = null;
 
-		Mensaje mensaje;
 		synchronized (this) {
-			mensaje = buff.remove(0);
-			System.out.println("Servidor retira mensaje: "+mensaje.darMensaje());
-			mensaje.aumentarMensaje();
-			mensaje.recibirRespuesta();
+			if(buff.size()>0)
+			{
+				mensaje = buff.remove(0);
+				System.out.println("Servidor retira mensaje: "+mensaje.darMensaje());
+				mensaje.aumentarMensaje();
+				mensaje.recibirRespuesta();
+			}
 		}
 		synchronized (lleno) {
 			lleno.notify();
