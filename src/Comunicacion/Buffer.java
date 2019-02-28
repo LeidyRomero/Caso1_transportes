@@ -6,11 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.print.attribute.standard.NumberOfDocuments;
-
-import Cliente.ClientePrincipal;
-
-import java.lang.Thread;
 /**
  * Clase que modela al buffer
  * 
@@ -21,17 +16,14 @@ public class Buffer {
 	public static final String RUTA = "./data/infoMain.txt";
 	private int capacidad = 0;
 	private int numeroClientesSalieron;
-	private int numeroServidores;
 	private ArrayList<Mensaje> buff;
 	private Object lleno;
-	private Object vacio;
 
 	public Buffer() throws IOException {
 		//Leyendo la capacidad del buffer:
 		BufferedReader lector = new BufferedReader(new FileReader(new File(RUTA)));
 		lector.readLine();//{
-		String[] servidores = lector.readLine().split(":");//numero de servidores
-		this.numeroServidores = Integer.parseInt(servidores[1].substring(0, servidores[1].length()-1));
+		lector.readLine();//numero de servidores
 		String[] clientes = lector.readLine().split(":");//numero de clientes
 		this.numeroClientesSalieron = Integer.parseInt(clientes[1].substring(0, clientes[1].length()-1));
 		
@@ -41,7 +33,6 @@ public class Buffer {
 
 		buff = new ArrayList<Mensaje>();
 		lleno = new Object();
-		vacio = new Object();
 	}
 	public synchronized void saleCliente()
 	{
@@ -76,22 +67,22 @@ public class Buffer {
 			System.out.println("Buffer agrega mensaje: "+mensaje.darMensaje());
 		}
 
-		synchronized (vacio) {
-			vacio.notify();	
-		}
+//		synchronized (vacio) {
+//			vacio.notify();	
+//		}
 	}
 
 	public Mensaje retirar() {
 
-		synchronized (vacio) {
-			try {
-				while(buff.size() == 0 && darNumeroClientesSalieron() > 0)
-					vacio.wait();				
-			} 
-			catch (InterruptedException e) {
-				// Manejo de excepción
-			}
-		}
+//		synchronized (vacio) {
+//			try {
+//				while(buff.size() == 0 && darNumeroClientesSalieron() > 0)
+//					vacio.wait();				
+//			} 
+//			catch (InterruptedException e) {
+//				// Manejo de excepción
+//			}
+//		}
 		Mensaje mensaje = null;
 
 		synchronized (this) {
@@ -111,13 +102,13 @@ public class Buffer {
 	
 	public void terminar()
 	{
-		synchronized (vacio) {
-				while(buff.size() == 0 && darNumeroClientesSalieron() == 0 && numeroServidores > 0)
-				{
-					vacio.notifyAll();
-					numeroServidores--;
-					System.out.println("numServidores: " + numeroServidores);
-				}
-		}
+//		synchronized (vacio) {
+//				while(buff.size() == 0 && darNumeroClientesSalieron() == 0 && numeroServidores > 0)
+//				{
+//					vacio.notifyAll();
+//					numeroServidores--;
+//					System.out.println("numServidores: " + numeroServidores);
+//				}
+//		}
 	}
 }
