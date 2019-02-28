@@ -16,7 +16,7 @@ import Comunicacion.Mensaje;
 public class ThreadServidor extends Thread{
 	private int id;
 	private static Buffer buffer;
-	
+
 	public ThreadServidor(int pId,Buffer pBuffer)
 	{
 		this.id = pId;
@@ -25,11 +25,22 @@ public class ThreadServidor extends Thread{
 	public void run()
 	{
 		System.out.println("Inicio de un nuevo thread servidor: "+ id);
-		
+
 		while(buffer.darNumeroClientesSalieron() > 0)
 		{
-			Mensaje mensaje = buffer.retirar(this);
+			synchronized (this) {
+				boolean a = true;//TODO revisar
+				while (buffer.darTamañoActualBuffer() == 0) {
+					if(a){
+						System.out.println("Buffer vacio");
+						a= false;
+					}
+					yield();
+				}
+			}
+			Mensaje mensaje = buffer.retirar();
 		}
+		//TODO parar servidor: cuando salga del while debería terminar
 	}
-
 }
+

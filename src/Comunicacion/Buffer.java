@@ -41,12 +41,18 @@ public class Buffer {
 	{
 		numeroClientesSalieron--;
 	}
-
+	public int darCapacidad()
+	{
+		return capacidad;
+	}
 	public int darNumeroClientesSalieron()
 	{
 		return numeroClientesSalieron;
 	}
-
+	public synchronized int darTamañoActualBuffer()
+	{
+		return buff.size();
+	}
 	public void almacenar(Mensaje mensaje) {
 
 		synchronized (lleno) {
@@ -69,7 +75,7 @@ public class Buffer {
 		}
 	}
 
-	public Mensaje retirar(Thread x) {
+	public Mensaje retirar() {
 
 		synchronized (vacio) {
 			try {
@@ -80,13 +86,6 @@ public class Buffer {
 				// Manejo de excepción
 			}
 		}
-
-//		synchronized (x) {
-//			while (buff.size() < capacidad) {
-//				System.out.println("Buffer vacio");
-//				x.yield();//TODO revisar
-//			}
-//		}
 
 		Mensaje mensaje;
 		synchronized (this) {
