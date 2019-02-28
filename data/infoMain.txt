@@ -1,6 +1,6 @@
 {
 "numeroServidores":2,
-"numeroClientes":5,
+"numeroClientes":3,
 "tamanioBuffer":2,
-"numeroMensajes":[1,2,3,4,5]
+"numeroMensajes":[1,2,1,2,1]
 }

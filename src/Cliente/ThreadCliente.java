@@ -33,7 +33,8 @@ public class ThreadCliente extends Thread{
 
 		while(numeroMaxMensajes > 0)
 		{
-			Mensaje mensajeCliente = new Mensaje((int)Math.round(Math.random()*29),0); 
+			Mensaje mensajeCliente = new Mensaje((int)Math.round(Math.random()*29),0,id); 
+			System.out.println("Thread: "+id+" envía mensaje: "+mensajeCliente.darMensaje());
 			buffer.almacenar(mensajeCliente);
 			mensajeCliente.enviarMensaje();
 

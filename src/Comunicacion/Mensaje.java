@@ -7,11 +7,13 @@ package Comunicacion;
 public class Mensaje {
 	private int mensaje;
 	private int contador;
+	private int idCliente;
 
-	public Mensaje(int consulta, int contador)
+	public Mensaje(int consulta, int contador, int idCliente)
 	{
 		this.mensaje = consulta;
 		this.contador = contador;
+		this.idCliente = idCliente;
 	}
 	public int darMensaje()
 	{
@@ -30,6 +32,7 @@ public class Mensaje {
 		{
 			try 
 			{
+				System.out.println("Thread "+ idCliente + " duerme en mensaje");
 				wait();
 			} 
 			catch (InterruptedException e)
@@ -44,6 +47,7 @@ public class Mensaje {
 		contador++;
 		if(contador <= 0)
 		{
+			System.out.println("Mensaje despierta al cliente.");
 			notify();
 		}
 	}
